@@ -1,0 +1,92 @@
+
+#Build command for sources of camera interaction (will be a makefile later, also uses -DOSX hack for MacOSX compilation and may require additional raindancing to compile under other platforms):
+#C++ sources (opencv)
+. ~/projects/alchemy-ubuntu-v0.5a/alchemy-setup
+
+export repo_root=/home/larrykite/projects/opencv_flash/flash-opencv/
+cd $repo_root
+rm **/*.o(.)
+rm -rf **/log(/) 
+
+echo "repo root = $repo_root"
+
+cd $repo_root/src/opencv
+
+[[ `which gcc` == '/usr/bin/gcc' ]] && alc-on;
+echo "gcc: `which gcc`"
+ 
+for cvdir in `ls -D`
+do 
+    echo "cvdir: $cvdir"
+    cd $cvdir
+    for src in *.cpp
+    do g++ -I$repo_root/include -c -Wall -O3 -o ${PWD##*/}_`basename $src .cpp`.o $src 2> `basename $src .cpp`.log 
+#    do g++ -I$repo_root/include -I/usr/local/include -c -Wall -O3 -o ${PWD##*/}_`basename $src .cpp`.o $src 2> `basename $src .cpp`.log 
+        echo "${PWD##*/}_`basename $src` done"
+    done
+    cd ..
+done
+
+alc-off; 
+#for f in ./log/*.log 
+#do grep 'error' $f ; 
+#done | cat | sort -u > ./log/errors.log ; 
+#less ./log/errors.log
+cd $repo_root/src/lapack
+#C sources (zlib, lapack)
+alc-on; 
+[[ -d log ]] && rm -rdf log
+#rm -f *.o  
+mkdir log   
+for src in *.c   
+do gcc -I$repo_root/include -c -Wall -O3 -o ${PWD##*/}_`basename $src .c`.o $src 2> `basename $src .c`.log   
+echo "${PWD##*/}_`basename $src` done"
+done   
+mv -v *.log ./log   
+alc-off  
+for f in ./log/*.log   
+do grep 'error' $f   
+done | cat | sort -u > ./log/errors.log   
+#cat ./log/errors.log
+
+
+cd $repo_root/src/zlib
+#C sources (zlib, lapack)
+alc-on; 
+[[ -d log ]] && rm -rdf log   
+#rm -f *.o  
+mkdir log   
+for src in *.c   
+do gcc -I$repo_root/include -c -Wall -O3 -o ${PWD##*/}_`basename $src .c`.o $src 2> `basename $src .c`.log   
+echo "${PWD##*/}_`basename $src` done"
+done   
+mv -v *.log ./log   
+alc-off  
+for f in ./log/*.log   
+do grep 'error' $f   
+done | cat | sort -u > ./log/errors.log   
+#cat ./log/errors.log
+
+
+
+
+
+#Build-run workflow:
+#1.    Build all sources
+#2.    Copy all .o's into $repo_root/flash (to be linked against main wrapper)
+cd $repo_root/src/
+mv **/*.o(.) $repo_root/flash
+#2.1.  Currently you have to REMOVE core_system.o as it uses some assembly that would not translate into bytecode.
+cd $repo_root/flash
+rm core_system.o
+#3.    Build wrapper swc library:
+rm *achacks* *.swc   
+alc-on  
+g++ -swc -Wall -O3 -I../include -o camlib.swc *.o camlib.cpp   
+alc-off 
+#4.    Build swf: 
+rm *.swf   
+alc-on  
+mxmlc -target-player=10.2 -library-path+=camlib.swc WebCam.as  
+alc-off 
+

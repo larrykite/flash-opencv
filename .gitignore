@@ -7,3 +7,4 @@ src/opencv/core/log/
 src/opencv/imgproc/log/
 src/opencv/objdetect/log/
 src/zlib/log/
+*.log
