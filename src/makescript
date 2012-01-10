@@ -1,5 +1,8 @@
-
-#Build command for sources of camera interaction (will be a makefile later, also uses -DOSX hack for MacOSX compilation and may require additional raindancing to compile under other platforms):
+# script to make flash-opencv on linux
+# to run, change path to alchemy-setup script, or comment out the first non-comment line below if you run it elsewhere.
+# Also change repo_root to the base repository directory on your system. 
+# Run command: '. ./makescript' from $repo_root/src
+# Will work on a proper makefile when time permits.
 #C++ sources (opencv)
 . ~/projects/alchemy-ubuntu-v0.5a/alchemy-setup
 
