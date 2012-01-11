@@ -8,3 +8,9 @@ src/opencv/imgproc/log/
 src/opencv/objdetect/log/
 src/zlib/log/
 *.log
+*.o
+*.tgz
+
+*.txt
+*.i
+*\#*

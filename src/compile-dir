@@ -1,0 +1,22 @@
+export repo_root=/home/larrykite/projects/opencv_flash/flash-opencv/
+cd $repo_root/src/opencv/$1
+rm **/*.o(.)
+rm -rf **/log(/) 
+
+echo "repo root = $repo_root"
+echo work dir = `pwd`
+
+
+[[ `which gcc` == '/usr/bin/gcc' ]] && alc-on;
+echo "gcc: `which gcc`"
+
+for src in *.cpp
+do g++ -I$repo_root/include -c -Wall -O3 -o ${PWD##*/}_`basename $src .cpp`.o $src 2> `basename $src .cpp`.log 
+    echo "${PWD##*/}_`basename $src` done"
+done
+
+[[ $1 == "core" ]] && rm $repo_root/src/opencv/core/core_system.o
+
+g++ -swc -Wall -O3 -I$repo_root/include -o $1.swc *.o
+alc-off; 
+popd

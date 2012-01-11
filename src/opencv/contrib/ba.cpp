@@ -42,12 +42,12 @@
 #include "precomp.hpp"
 #include "opencv2/calib3d/calib3d.hpp"
 
-namespace cv {
+namespace cv {  
 
 LevMarqSparse::LevMarqSparse()
 {
     A = B = W = Vis_index = X = prevP = P = deltaP = err = JtJ_diag = S = hX = NULL;
-    U = ea = V = inv_V_star = eb = Yj = NULL;
+    U = ea = V = inv_V_star = eb = Yj = NULL;    
     num_points = 0;
     num_cams = 0;
 }

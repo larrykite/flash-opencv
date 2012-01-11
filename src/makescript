@@ -1,4 +1,4 @@
-# script to make flash-opencv on linux
+# zshell script to make flash-opencv on linux
 # to run, change path to alchemy-setup script, or comment out the first non-comment line below if you run it elsewhere.
 # Also change repo_root to the base repository directory on your system. 
 # Run command: '. ./makescript' from $repo_root/src
@@ -17,17 +17,20 @@ cd $repo_root/src/opencv
 
 [[ `which gcc` == '/usr/bin/gcc' ]] && alc-on;
 echo "gcc: `which gcc`"
- 
+
 for cvdir in `ls -D`
 do 
-    echo "cvdir: $cvdir"
-    cd $cvdir
-    for src in *.cpp
-    do g++ -I$repo_root/include -c -Wall -O3 -o ${PWD##*/}_`basename $src .cpp`.o $src 2> `basename $src .cpp`.log 
+    if [[ -d $cvdir ]]
+    then
+        echo "cvdir: $cvdir"
+        cd $cvdir
+        for src in *.cpp
+        do g++ -I$repo_root/include -c -Wall -O3 -o ${PWD##*/}_`basename $src .cpp`.o $src 2> `basename $src .cpp`.log 
 #    do g++ -I$repo_root/include -I/usr/local/include -c -Wall -O3 -o ${PWD##*/}_`basename $src .cpp`.o $src 2> `basename $src .cpp`.log 
-        echo "${PWD##*/}_`basename $src` done"
-    done
-    cd ..
+            echo "${PWD##*/}_`basename $src` done"
+        done
+        cd ..
+    fi
 done
 
 alc-off; 
